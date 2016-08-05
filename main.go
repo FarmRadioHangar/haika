@@ -28,6 +28,7 @@ func main() {
 		fmt.Println(err)
 	}
 	for _, v := range table {
+		rst[v.tag] = 0
 		out, err := exec.Command("/usr/bin/grep",
 			fmt.Sprintf(" -cF '%s' %s", v.arg, file)).Output()
 		if err != nil {

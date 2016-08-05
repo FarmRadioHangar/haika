@@ -2,32 +2,42 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
-	script := "/home/fri/fessbox/backend-node/sh/past-hour-metrics.sh"
+	logFile := "/home/fri/fessbox/backend-node/log/debug.log"
 	table := []struct {
-		tag     string
-		command string
-		args    []string
+		tag string
+		arg string
 	}{
-		{"incoming_sms", script, []string{"sms_in"}},
-		{"incoming_calls", script, []string{"from ring to master"}},
+		{"incoming_sms", "sms_in"},
+		{"incoming_calls", "from ring to master"},
 	}
+	layout := "2006.01,02-15"
+	now := time.Now().Format(layout)
 	rst := make(map[string]interface{})
+	file := logFile + "-" + now
+	_, err := os.Stat(file)
+	if err != nil {
+		fmt.Println(err)
+	}
 	for _, v := range table {
-		out, err := exec.Command(v.command, v.args...).Output()
+		out, err := exec.Command("/usr/bin/grep",
+			fmt.Sprintf(" -cF '%s' %s", v.arg, file)).Output()
 		if err != nil {
-			os.Exit(1)
+			continue
 		}
 		i, err := strconv.Atoi(
 			strings.TrimSpace(string(out)))
 		if err != nil {
-			os.Exit(1)
+			fmt.Println(err)
+			continue
 		}
 		rst[v.tag] = i
 	}

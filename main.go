@@ -19,7 +19,7 @@ func main() {
 		{"incoming_sms", "sms_in"},
 		{"incoming_calls", "from ring to master"},
 	}
-	layout := "2006.01,02-15"
+	layout := "2006.01.02-15"
 	now := time.Now().Format(layout)
 	rst := make(map[string]interface{})
 	file := logFile + "-" + now

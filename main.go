@@ -25,7 +25,7 @@ func main() {
 	file := logFile + "-" + now
 	_, err := os.Stat(file)
 	if err != nil {
-		fmt.Println(err)
+		return
 	}
 	for _, v := range table {
 		rst[v.tag] = 0

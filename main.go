@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -15,7 +16,7 @@ func main() {
 		args    []string
 	}{
 		{"incoming_sms", script, []string{"sms_in"}},
-		{"incoming_call", script, []string{"from ring to master"}},
+		{"incoming_calls", script, []string{"from ring to master"}},
 	}
 	rst := make(map[string]interface{})
 	for _, v := range table {
@@ -23,7 +24,8 @@ func main() {
 		if err != nil {
 			os.Exit(1)
 		}
-		i, err := strconv.Atoi(string(out))
+		i, err := strconv.Atoi(
+			strings.TrimSpace(string(out)))
 		if err != nil {
 			os.Exit(1)
 		}

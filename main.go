@@ -28,11 +28,13 @@ func main() {
 		return
 	}
 	for _, v := range table {
-		rst[v.tag] = 0
 		out, err := exec.Command("/usr/bin/grep",
-			fmt.Sprintf(" -cF '%s' %s", v.arg, file)).Output()
+			"-cF", fmt.Sprintf("\"%s\"", v.arg), file).Output()
 		if err != nil {
-			continue
+			if out == nil {
+				rst[v.tag] = 0
+				continue
+			}
 		}
 		i, err := strconv.Atoi(
 			strings.TrimSpace(string(out)))

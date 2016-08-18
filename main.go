@@ -25,7 +25,7 @@ func main() {
 	file := logFile + "-" + now
 	_, err := os.Stat(file)
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
 	for _, v := range table {
 		out, err := exec.Command("/usr/bin/grep",
